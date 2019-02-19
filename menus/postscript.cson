@@ -1,4 +1,7 @@
 "context-menu":
+	".postscript-preview": [
+		{label: "Save as PNG\u2026", command: "core:save-as"}
+	]
 	'atom-text-editor[data-grammar="source postscript"],
 	.tree-view .file > [data-path$=".ps"],   .tab > [data-path$=".ps"],
 	.tree-view .file > [data-path$=".eps"],  .tab > [data-path$=".eps"]': [{
