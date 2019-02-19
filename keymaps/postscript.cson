@@ -1,0 +1,2 @@
+'atom-text-editor[data-grammar="source postscript"], .postscript-preview':
+	"ctrl-shift-m": "postscript-preview:toggle"
