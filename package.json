@@ -19,9 +19,25 @@
 	},
 	"configSchema": {
 		"openInSplitPane": {
+			"order": 1,
 			"type": "boolean",
 			"default": true,
 			"description": "Open previewer in a split pane. If disabled, a new tab in the same pane is created."
+		},
+		"alphaBits": {
+			"order": 2,
+			"title": "Antialiasing level",
+			"type": "integer",
+			"default": 4,
+			"enum": [1, 2, 4],
+			"description": "Subsample antialiasing level. Lower values result in choppier but faster renders."
+		},
+		"resolution": {
+			"order": 3,
+			"type": "integer",
+			"default": 300,
+			"minimum": 72,
+			"description": "Resolution of rendered images, expressed in DPI."
 		}
 	}
 }
