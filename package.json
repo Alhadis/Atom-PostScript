@@ -11,7 +11,17 @@
 		"atom": ">=1.25.0"
 	},
 	"package-deps": ["file-icons", "language-postscript"],
+	"dependencies": {
+		"alhadis.utils": "*"
+	},
 	"deserializers": {
 		"PostScriptPreviewView": "createPreviewView"
+	},
+	"configSchema": {
+		"openInSplitPane": {
+			"type": "boolean",
+			"default": true,
+			"description": "Open previewer in a split pane. If disabled, a new tab in the same pane is created."
+		}
 	}
 }
