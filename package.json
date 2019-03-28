@@ -12,7 +12,8 @@
 	},
 	"package-deps": ["file-icons", "language-postscript"],
 	"dependencies": {
-		"alhadis.utils": "*"
+		"alhadis.utils": "*",
+		"atom-live-view": "*"
 	},
 	"deserializers": {
 		"PostScriptPreviewView": "createPreviewView"
