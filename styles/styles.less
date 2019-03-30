@@ -1,3 +1,5 @@
+@import "ui-variables";
+
 .icon-ghostscript::before{
 	font: 15px file-icons;
 	content: "\ea8f";
@@ -9,8 +11,11 @@
 	overflow: auto;
 	
 	img{
-		width: 100%;
+		width: calc(100% - 4em);
 		display: block;
 		pointer-events: none;
+		background-color: #fff;
+		box-shadow: 0 .5em 1.25em -0.25em #000;
+		margin: 1em;
 	}
 }
