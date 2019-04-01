@@ -10,6 +10,14 @@
 .postscript-preview{
 	overflow: auto;
 	
+	.zoom-layer{
+		transition: .25s ease transform;
+		
+		&.zooming{
+			overflow: hidden;
+		}
+	}
+	
 	img{
 		width: calc(100% - 4em);
 		display: block;

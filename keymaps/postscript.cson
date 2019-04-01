@@ -1,2 +1,11 @@
 'atom-text-editor[data-grammar="source postscript"], .postscript-preview':
 	"ctrl-shift-m": "postscript-preview:toggle"
+
+".platform-darwin .postscript-preview":
+	"cmd-=": "postscript-preview:zoom-in"
+	"cmd--": "postscript-preview:zoom-out"
+
+".platform-linux .postscript-preview,
+ .platform-win32 .postscript-preview":
+	"ctrl-+": "postscript-preview:zoom-in"
+	"ctrl--": "postscript-preview:zoom-out"
