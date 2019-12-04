@@ -12,7 +12,6 @@
 	},
 	"package-deps": ["file-icons", "language-postscript"],
 	"dependencies": {
-		"alhadis.utils": "*",
 		"atom-live-view": "*",
 		"pan-and-zoom": "^1.0.0"
 	},
