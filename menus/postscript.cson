@@ -6,5 +6,5 @@
 	.tree-view .file > [data-path$=".ps"],   .tab > [data-path$=".ps"],
 	.tree-view .file > [data-path$=".eps"],  .tab > [data-path$=".eps"]': [{
 		label:   "Toggle PostScript Preview"
-		command: "postscript-preview:toggle"
+		command: "postscript:toggle-preview"
 	}]
