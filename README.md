@@ -1,5 +1,5 @@
-Atom PostScript Preview
-=======================
+PostScript support for Atom
+===========================
 
 Live previews of PostScript/EPS files using [GhostScript][].
 
