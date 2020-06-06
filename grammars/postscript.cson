@@ -419,12 +419,18 @@ repository:
 		name: "keyword.operator.postscript"
 		match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) \\b
 			( FontDirectory
+			| GetHalftoneName
+			| GetPageDeviceName
+			| GetSubstituteCRD
 			| GlobalFontDirectory
 			| ISOLatin1Encoding
+			| SharedFontDirectory
 			| StandardEncoding
+			| StartData
 			| UserObjects
 			| VMerror
 			| abs
+			| addglyph
 			| add
 			| aload
 			| anchorsearch
@@ -438,6 +444,16 @@ repository:
 			| astore
 			| atan
 			| awidthshow
+			| beginbfchar
+			| beginbfrange
+			| begincidchar
+			| begincidrange
+			| begincmap
+			| begincodespacerange
+			| beginnotdefchar
+			| beginnotdefrange
+			| beginrearrangedfont
+			| beginusematrix
 			| begin
 			| bind
 			| bitshift
@@ -449,10 +465,13 @@ repository:
 			| cleartomark
 			| clear
 			| clippath
+			| cliprestore
+			| clipsave
 			| clip
 			| closefile
 			| closepath
 			| colorimage
+			| composefont
 			| concatmatrix
 			| concat
 			| condition
@@ -468,11 +487,11 @@ repository:
 			| currentblackgeneration
 			| currentcacheparams
 			| currentcmykcolor
-			| currentcolor
 			| currentcolorrendering
 			| currentcolorscreen
 			| currentcolorspace
 			| currentcolortransfer
+			| currentcolor
 			| currentcontext
 			| currentdash
 			| currentdevparams
@@ -492,15 +511,18 @@ repository:
 			| currentmatrix
 			| currentmiterlimit
 			| currentobjectformat
+			| currentoverprint
 			| currentpacking
 			| currentpagedevice
 			| currentpoint
 			| currentrgbcolor
 			| currentscreen
 			| currentshared
+			| currentsmoothness
 			| currentstrokeadjust
 			| currentsystemparams
 			| currenttransfer
+			| currenttrapparams
 			| currentundercolorremoval
 			| currentuserparams
 			| curveto
@@ -530,6 +552,16 @@ repository:
 			| dup
 			| echo
 			| eexec
+			| endbfchar
+			| endbfrange
+			| endcidchar
+			| endcidrange
+			| endcmap
+			| endcodespacerange
+			| endnotdefchar
+			| endnotdefrange
+			| endrearrangedfont
+			| endusematrix
 			| end
 			| eoclip
 			| eofill
@@ -545,6 +577,7 @@ repository:
 			| executeonly
 			| executive
 			| exec
+			| exitserver
 			| exit
 			| exp
 			| false
@@ -553,6 +586,7 @@ repository:
 			| file
 			| fill
 			| filter
+			| findcolorrendering
 			| findencoding
 			| findfont
 			| findresource
@@ -563,6 +597,7 @@ repository:
 			| forall
 			| fork
 			| for
+			| gcheck
 			| getinterval
 			| get
 			| ge
@@ -651,6 +686,7 @@ repository:
 			| quit
 			| rand
 			| rangecheck
+			| rcheck
 			| rcurveto
 			| readhexstring
 			| readline
@@ -662,6 +698,8 @@ repository:
 			| rectfill
 			| rectstroke
 			| rectviewclip
+			| removeall
+			| removeglyphs
 			| renamefile
 			| repeat
 			| resetfile
@@ -685,6 +723,7 @@ repository:
 			| search
 			| selectfont
 			| serialnumber
+			| serverdict
 			| setbbox
 			| setblackgeneration
 			| setcachedevice2
@@ -722,14 +761,18 @@ repository:
 			| setrgbcolor
 			| setscreen
 			| setshared
+			| setsmoothness
 			| setstrokeadjust
 			| setsystemparams
 			| settransfer
+			| settrapparams
+			| settrapzone
 			| setucacheparams
 			| setundercolorremoval
 			| setuserparams
 			| setvmthreshold
 			| shareddict
+			| shfill
 			| showpage
 			| show
 			| sin
@@ -776,6 +819,8 @@ repository:
 			| unmatchedmark
 			| unregistered
 			| upath
+			| usecmap
+			| usefont
 			| userdict
 			| usertime
 			| ustrokepath
@@ -801,6 +846,11 @@ repository:
 			| yield
 			| yshow
 			) \\b (?![^/\\s{}()<>\\[\\]%])
+			|
+			# Stuff that starts with a non-word character
+			(?<=^|[/\\s{}()<>\\[\\]%])
+			(=?=|\\$error)
+			(?=$|[/\\s{}()<>\\[\\]%])
 		"""
 
 
