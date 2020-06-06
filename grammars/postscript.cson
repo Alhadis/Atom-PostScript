@@ -1,0 +1,858 @@
+name: "PostScript"
+scopeName: "source.postscript"
+fileTypes: ["ps", "eps", "epsf", "epsi", "gsf", "pfa", "pfb", "t1", "t42", "ai", "pdf"]
+firstLineMatch: """(?x)
+	# Signature
+	\\A%(?:!|PDF)
+	|
+	# Hashbang
+	^\\#!.*(?:\\s|\\/|(?<=!)\\b)
+		gs
+	(?:$|\\s)
+	|
+	# Modeline
+	(?i:
+		# Emacs
+		-\\*-(?:\\s*(?=[^:;\\s]+\\s*-\\*-)|(?:.*?[;\\s]|(?<=-\\*-))mode\\s*:\\s*)
+			(?:ps|postscript)
+		(?=[\\s;]|(?<![-*])-\\*-).*?-\\*-
+		
+		|
+		
+		# Vim
+		(?:(?:\\s|^)vi(?:m[<=>]?\\d+|m)?|\\sex)(?=:(?=\\s*set?\\s[^\\n:]+:)|:(?!\\s* set?\\s))
+		(?:(?:\\s|\\s*:\\s*)\\w*(?:\\s*=(?:[^\\n\\\\\\s]|\\\\.)*)?)*[\\s:]
+		(?:filetype|ft|syntax)\\s*=
+			postscr(?:ipt)?
+		(?=\\s|:|$)
+	)
+"""
+foldingStartMarker: "(?:{|<<|^stream)\\s*$"
+foldingStopMarker:  "(?:}|>>|^end(?:stream|obj))"
+limitLineLength: no
+maxTokensPerLine: 1000
+
+patterns: [{
+	name:  "meta.document.pdf"
+	begin: "\\A(?=%PDF)"
+	end:   "(?=A)B"
+	patterns: [include: "#main"]
+}, include: "#main"]
+
+injections:
+	# PDF-specific elements
+	"L:source.postscript meta.document.pdf - (meta.encrypted-source | text.embedded)":
+		patterns: [{
+			# Binary streams
+			name:  "meta.encrypted-source.stream.pdf"
+			begin: "(?:^|(?<=>>)\\s*)(?=stream$)"
+			end:   "endstream|(?=endobj\\b)"
+			endCaptures:
+				0: name: "keyword.control.stream.end.pdf"
+			patterns: [{
+				begin: "\\G(stream)\\s*$\\s*"
+				end:   "(?=endstream|(?=endobj\\b))"
+				beginCaptures:
+					1: name: "keyword.control.stream.begin.pdf"
+				patterns: [{
+					# Those weird-ass XML chunks Adobe Illustrator uses
+					begin: "(<\\?xpacket(?=\\s)[^>]+\\?>)(?=$|<x:xmpmeta)"
+					end:   "(<\\?xpacket(?=\\s)[^>]*end\\b[^>]*\\?>)|(?=\\s*(?:endstream|endobj\\b))"
+					beginCaptures: 1: name: "text.embedded.xml", patterns: [include: "text.xml"]
+					endCaptures:   1: name: "text.embedded.xml", patterns: [include: "text.xml"]
+					contentName: "text.embedded.xml"
+					patterns: [include: "text.xml"]
+				},{
+					# Ascii85
+					name:  "string.other.base85.pdf"
+					begin: "(?!endstream)[!-uz]{50,80}\\s*$"
+					end:   "~>|(?=\\s*(?:endstream|endobj\\b))"
+					endCaptures:
+						0: name: "punctuation.definition.string.end.pdf"
+				},{
+					# Raw binary
+					name:  "string.other.raw.binary.pdf"
+					begin: "(?!endstream|[!-uz]{50,80}\\s*$)(?:(?<=[\\n\\r]|\\G|^))(?=.)"
+					end:   "(?=\\s*(?:endstream|endobj\\b))"
+					contentName: "sublimelinter.gutter-mark"
+				}]
+			}]
+		},{
+			# Objects
+			match: "\\b(obj)\\s*(?=<<|$)|(?<=^|\\n|>>)(endobj)"
+			captures:
+				1: name: "keyword.control.object.begin.pdf"
+				2: name: "keyword.control.object.end.pdf"
+		},{
+			# Trailer
+			name:  "keyword.control.$1.pdf"
+			match: "\\b(trailer|startxref)\\b"
+		}]
+
+
+repository:
+	main:
+		patterns: [
+			{include: "#string"}
+			{include: "#comment"}
+			{include: "#dictionary"}
+			{include: "#array"}
+			{include: "#procedure"}
+			{include: "#base85"}
+			{include: "#hex"}
+			{include: "#radix"}
+			{include: "#number"}
+			{include: "#embedded"}
+			{include: "#operators"}
+			{include: "#embeddedRow"}
+			{include: "#names"}
+			{include: "#cr"}
+		]
+
+
+	# [ … ]
+	array:
+		name:  "meta.array.postscript"
+		begin: "\\["
+		end:   "\\]"
+		beginCaptures: 0: name: "punctuation.definition.array.begin.postscript"
+		endCaptures:   0: name: "punctuation.definition.array.end.postscript"
+		patterns: [include: "#main"]
+
+
+	# Ascii85-encoded data: <~ … ~>
+	base85:
+		name:  "string.other.base85.postscript"
+		begin: "<~"
+		end:   "~>"
+		beginCaptures: 0: name: "punctuation.definition.string.begin.postscript"
+		endCaptures:   0: name: "punctuation.definition.string.end.postscript"
+		patterns: [
+			name: "invalid.illegal.base85.char.postscript"
+			match: "(?:[^<!-uz\\s]|<(?!~))++"
+		]
+
+	
+	# Carriage return, sometimes found in old PostScript
+	cr:
+		name: "carriage-return.postscript"
+		match: "\\r(?!\\n)"
+
+
+	# % Commented line
+	comment:
+		patterns: [
+			# XXX: Not sure why TextMate tokenises this, but I guess I will too
+			name:  "punctuation.whitespace.comment.leading.postscript"
+			match: "^[ \\t]+(?=%)"
+			
+			# %%DSC: Document Structuring Conventions
+			{include: "#dsc"}
+			
+			# % Comment
+			name:  "comment.line.percentage.postscript"
+			begin: "%"
+			end:   "(?=$|\\r|\\f)"
+			beginCaptures:
+				0: name: "punctuation.definition.comment.postscript"
+		]
+
+
+	# << … >>
+	dictionary:
+		name:  "meta.dictionary.postscript"
+		begin: "<<"
+		end:   ">>"
+		beginCaptures: 0: name: "punctuation.definition.dictionary.begin.postscript"
+		endCaptures:   0: name: "punctuation.definition.dictionary.end.postscript"
+		patterns: [include: "#main"]
+
+
+	# Document Structuring Convention
+	dsc:
+		name: "meta.Document-Structuring-Comment.postscript"
+		beginCaptures:
+			0: name: "keyword.other.DSC.postscript"
+			1: name: "punctuation.definition.keyword.DSC.postscript"
+			3: name: "keyword.operator.assignment.key-value.colon.postscript"
+		contentName: "string.unquoted.DSC.postscript"
+		begin: """(?x) ^ (%%)
+			( BeginBinary
+			| BeginCustomColor
+			| BeginData
+			| BeginDefaults
+			| BeginDocument
+			| BeginEmulation
+			| BeginExitServer
+			| BeginFeature
+			| BeginFile
+			| BeginFont
+			| BeginObject
+			| BeginPageSetup
+			| BeginPaperSize
+			| BeginPreview
+			| BeginProcSet
+			| BeginProcessColor
+			| BeginProlog
+			| BeginResource
+			| BeginSetup
+			| BoundingBox
+			| CMYKCustomColor
+			| ChangeFont
+			| Copyright
+			| CreationDate
+			| Creator
+			| DocumentCustomColors
+			| DocumentData
+			| DocumentFonts
+			| DocumentMedia
+			| DocumentNeededFiles
+			| DocumentNeededFonts
+			| DocumentNeededProcSets
+			| DocumentNeededResources
+			| DocumentPaperColors
+			| DocumentPaperForms
+			| DocumentPaperSizes
+			| DocumentPaperWeights
+			| DocumentPrinterRequired
+			| DocumentProcSets
+			| DocumentProcessColors
+			| DocumentSuppliedFiles
+			| DocumentSuppliedFonts
+			| DocumentSuppliedProcSets
+			| DocumentSuppliedResources
+			| EOF
+			| Emulation
+			| EndBinary
+			| EndComments
+			| EndCustomColor
+			| EndData
+			| EndDefaults
+			| EndDocument
+			| EndEmulation
+			| EndExitServer
+			| EndFeature
+			| EndFile
+			| EndFont
+			| EndObject
+			| EndPageSetup
+			| EndPaperSize
+			| EndPreview
+			| EndProcSet
+			| EndProcessColor
+			| EndProlog
+			| EndResource
+			| EndSetup
+			| ExecuteFile
+			| Extensions
+			| Feature
+			| For
+			| IncludeDocument
+			| IncludeFeature
+			| IncludeFile
+			| IncludeFont
+			| IncludeProcSet
+			| IncludeResource
+			| LanguageLevel
+			| OperatorIntervention
+			| OperatorMessage
+			| Orientation
+			| Page
+			| PageBoundingBox
+			| PageCustomColors
+			| PageFiles
+			| PageFonts
+			| PageMedia
+			| PageOrder
+			| PageOrientation
+			| PageProcessColors
+			| PageRequirements
+			| PageResources
+			| PageTrailer
+			| Pages
+			| PaperColor
+			| PaperForm
+			| PaperSize
+			| PaperWeight
+			| ProofMode
+			| RGBCustomColor
+			| Requirements
+			| Routing
+			| Title
+			| Trailer
+			| VMlocation
+			| VMusage
+			| Version
+			| \\+
+			| \\?BeginFeatureQuery
+			| \\?BeginFileQuery
+			| \\?BeginFontListQuery
+			| \\?BeginFontQuery
+			| \\?BeginPrinterQuery
+			| \\?BeginProcSetQuery
+			| \\?BeginQuery
+			| \\?BeginResourceListQuery
+			| \\?BeginResourceQuery
+			| \\?BeginVMStatus
+			| \\?EndFeatureQuery
+			| \\?EndFileQuery
+			| \\?EndFontListQuery
+			| \\?EndFontQuery
+			| \\?EndPrinterQuery
+			| \\?EndProcSetQuery
+			| \\?EndQuery
+			| \\?EndResourceListQuery
+			| \\?EndResourceQuery
+			| \\?EndVMStatus
+			) (:)? [^\\S\\r\\n]*
+		"""
+		end: "(?=$|\\r|\\f)"
+
+
+	# Encrypted PostScript sections
+	embedded:
+		patterns: [{
+			# Base85-encoded
+			name:  "meta.encrypted-source.base85.postscript"
+			begin: "\\b(currentfile)\\s*((/)ASCII85Decode)\\s+(filter)\\b([^}>\\]%]*?(?:exec|image|readstring)\\s*)$\\s*+"
+			end:   "~>|(?=cleartomark|closefile)"
+			contentName: "string.other.base85.postscript"
+			beginCaptures:
+				1: name: "keyword.operator.postscript"
+				2: name: "variable.other.literal.postscript"
+				3: name: "punctuation.definition.name.postscript"
+				4: name: "keyword.operator.postscript"
+				5: patterns: [include: "#main"]
+			endCaptures:
+				0: name: "punctuation.definition.string.end.postscript"
+		},{
+			# `eexec` encryption, typically found only in Type 1 font programs
+			name:  "meta.encrypted-source.eexec.postscript"
+			begin: "\\b(currentfile)\\s+(eexec)(?:$|(?=.*[\\0-\\x08\\x14-\\x31\\x7F\\x80-\\x9F])(?=.{0,3}?[^A-Fa-f0-9]|\\b[A-Fa-f0-9]))"
+			end:   "(cleartomark|closefile)\\b|(?<=\\G)(?=[^\\s0-9A-Fa-f])"
+			beginCaptures:
+				1: name: "keyword.operator.postscript"
+				2: name: "keyword.operator.postscript"
+			endCaptures:
+				1: name: "keyword.operator.postscript"
+			patterns: [{
+				begin: "\\G(?=\\s*$)"
+				end:   "(?=\\s*\\S)"
+				patterns: [include: "#cr"]
+			},{
+				begin: "(?:\\G|(?<=\\n|^))(\\s*)(?=\\S)"
+				end:   "(?!\\G)"
+				beginCaptures:
+					1: patterns: [include: "#cr"]
+				patterns: [{
+					# Raw binary
+					# - TODO: Find out how PostScript engines differentiate between a
+					#   procedure named `eexecute` and `eexec` followed by raw binary.
+					name:  "string.other.raw.binary.postscript"
+					begin: "\\G(?!cleartomark|closefile)(?=.{0,3}?[^A-Fa-f0-9])"
+					end:   "(?=\\s*(?:cleartomark|closefile))"
+					contentName: "sublimelinter.gutter-mark"
+					patterns: [include: "#cr"]
+				},{
+					# Hexadecimal
+					name:  "string.other.hexadecimal.postscript"
+					begin: "\\G(?!cleartomark|closefile)(?=\\s{0,3}?(?:[A-Fa-f0-9]))"
+					end:   "(?=\\s*[^A-Fa-f0-9\\s]|cleartomark|closefile)"
+					patterns: [include: "#cr"]
+				}]
+			}]
+		}]
+
+
+	# Lines of obvious-looking Ascii85-encoded data
+	embeddedRow:
+		patterns: [{
+			name: "string.other.base85.postscript"
+			match: "^[!-uz]{0,78}(~>)"
+			captures:
+				1: name: "punctuation.definition.string.end.postscript"
+		},{
+			name:  "string.other.base85.postscript"
+			begin: """(?x) ^
+				(?= [^%\\[]*? \\]
+				|   [^%(]*?   \\)
+				|   [^%<]*?   >
+				|   .*? <(?!~|<) [A-Fa-f0-9]* [^~>A-Fa-f0-9]
+				) [!-uz]{60,80} [^\\S\\r\\n]* $
+			"""
+			end: "^[!-uz]{0,78}(~>)"
+			endCaptures:
+				0: name: "punctuation.definition.string.end.postscript"
+		}]
+
+
+	# Hexadecimal data: < … >
+	hex:
+		name: "string.other.hexadecimal.postscript"
+		begin: "<"
+		end:   ">"
+		beginCaptures: 0: name: "punctuation.definition.string.begin.postscript"
+		endCaptures:   0: name: "punctuation.definition.string.end.postscript"
+		patterns: [
+			name: "invalid.illegal.hexadecimal.char.postscript"
+			match: "[^>0-9A-Fa-f\\s]+"
+		]
+
+
+	# Name objects
+	names:
+		patterns: [{
+			# //Immediately Evaluated Name
+			name:  "variable.other.constant.immediately-evaluated.postscript"
+			match: "(//)[^()<>\\[\\]{}/%\\s]*"
+			captures:
+				1: name: "punctuation.definition.name.postscript"
+		},{
+			# /Literal
+			name:  "variable.other.constant.literal.postscript"
+			match: "(/)[^()<>\\[\\]{}/%\\s]*"
+			captures:
+				1: name: "punctuation.definition.name.postscript"
+		},{
+			# Executable
+			name:  "variable.other.executable.postscript"
+			match: "[^()<>\\[\\]{}/%\\s]+"
+		}]
+
+
+	# Integers and floating-points
+	number:
+		name:  "constant.numeric.postscript"
+		match: "[-+]?(?:\\d+(?:\\.\\d*)?|\\.\\d+)(?:[Ee][-+]?\\d+)?(?=$|[\\s\\[\\]{}(/%<])"
+
+
+	# Built-ins
+	operators:
+		name: "keyword.operator.postscript"
+		match: """(?x) \\b
+			( FontDirectory
+			| GlobalFontDirectory
+			| ISOLatin1Encoding
+			| StandardEncoding
+			| UserObjects
+			| VMerror
+			| abs
+			| add
+			| aload
+			| anchorsearch
+			| and
+			| arcn
+			| arcto
+			| arct
+			| arc
+			| array
+			| ashow
+			| astore
+			| atan
+			| awidthshow
+			| begin
+			| bind
+			| bitshift
+			| bytesavailable
+			| cachestatus
+			| ceiling
+			| charpath
+			| cleardictstack
+			| cleartomark
+			| clear
+			| clippath
+			| clip
+			| closefile
+			| closepath
+			| colorimage
+			| concatmatrix
+			| concat
+			| condition
+			| configurationerror
+			| copypage
+			| copy
+			| cos
+			| countdictstack
+			| countexecstack
+			| counttomark
+			| count
+			| cshow
+			| currentblackgeneration
+			| currentcacheparams
+			| currentcmykcolor
+			| currentcolor
+			| currentcolorrendering
+			| currentcolorscreen
+			| currentcolorspace
+			| currentcolortransfer
+			| currentcontext
+			| currentdash
+			| currentdevparams
+			| currentdict
+			| currentfile
+			| currentflat
+			| currentfont
+			| currentglobal
+			| currentgray
+			| currentgstate
+			| currenthalftonephase
+			| currenthalftone
+			| currenthsbcolor
+			| currentlinecap
+			| currentlinejoin
+			| currentlinewidth
+			| currentmatrix
+			| currentmiterlimit
+			| currentobjectformat
+			| currentpacking
+			| currentpagedevice
+			| currentpoint
+			| currentrgbcolor
+			| currentscreen
+			| currentshared
+			| currentstrokeadjust
+			| currentsystemparams
+			| currenttransfer
+			| currentundercolorremoval
+			| currentuserparams
+			| curveto
+			| cvi
+			| cvlit
+			| cvn
+			| cvrs
+			| cvr
+			| cvs
+			| cvx
+			| defaultmatrix
+			| definefont
+			| defineresource
+			| defineusername
+			| defineuserobject
+			| def
+			| deletefile
+			| detach
+			| deviceinfo
+			| dictfull
+			| dictstackoverflow
+			| dictstackunderflow
+			| dictstack
+			| dict
+			| div
+			| dtransform
+			| dup
+			| echo
+			| eexec
+			| end
+			| eoclip
+			| eofill
+			| eoviewclip
+			| eq
+			| erasepage
+			| errordict
+			| exch
+			| execform
+			| execstackoverflow
+			| execstack
+			| execuserobject
+			| executeonly
+			| executive
+			| exec
+			| exit
+			| exp
+			| false
+			| filenameforall
+			| fileposition
+			| file
+			| fill
+			| filter
+			| findencoding
+			| findfont
+			| findresource
+			| flattenpath
+			| floor
+			| flushfile
+			| flush
+			| forall
+			| fork
+			| for
+			| getinterval
+			| get
+			| ge
+			| globaldict
+			| glyphshow
+			| grestoreall
+			| grestore
+			| gsave
+			| gstate
+			| gt
+			| handleerror
+			| identmatrix
+			| idiv
+			| idtransform
+			| ifelse
+			| if
+			| imagemask
+			| image
+			| index
+			| ineofill
+			| infill
+			| initclip
+			| initgraphics
+			| initmatrix
+			| initviewclip
+			| instroke
+			| internaldict
+			| interrupt
+			| inueofill
+			| inufill
+			| inustroke
+			| invalidaccess
+			| invalidcontext
+			| invalidexit
+			| invalidfileaccess
+			| invalidfont
+			| invalidid
+			| invalidrestore
+			| invertmatrix
+			| ioerror
+			| itransform
+			| join
+			| known
+			| kshow
+			| languagelevel
+			| length
+			| le
+			| limitcheck
+			| lineto
+			| ln
+			| load
+			| lock
+			| log
+			| loop
+			| lt
+			| makefont
+			| makepattern
+			| mark
+			| matrix
+			| maxlength
+			| mod
+			| monitor
+			| moveto
+			| mul
+			| neg
+			| newpath
+			| ne
+			| noaccess
+			| nocurrentpoint
+			| notify
+			| not
+			| nulldevice
+			| null
+			| or
+			| packedarray
+			| pathbbox
+			| pathforall
+			| pop
+			| printobject
+			| print
+			| product
+			| prompt
+			| pstack
+			| putinterval
+			| put
+			| quit
+			| rand
+			| rangecheck
+			| rcurveto
+			| readhexstring
+			| readline
+			| readonly
+			| readstring
+			| read
+			| realtime
+			| rectclip
+			| rectfill
+			| rectstroke
+			| rectviewclip
+			| renamefile
+			| repeat
+			| resetfile
+			| resourceforall
+			| resourcestatus
+			| restore
+			| reversepath
+			| revision
+			| rlineto
+			| rmoveto
+			| roll
+			| rootfont
+			| rotate
+			| round
+			| rrand
+			| run
+			| save
+			| scalefont
+			| scale
+			| scheck
+			| search
+			| selectfont
+			| serialnumber
+			| setbbox
+			| setblackgeneration
+			| setcachedevice2
+			| setcachedevice
+			| setcachelimit
+			| setcacheparams
+			| setcharwidth
+			| setcmykcolor
+			| setcolorrendering
+			| setcolorscreen
+			| setcolorspace
+			| setcolortransfer
+			| setcolor
+			| setdash
+			| setdevparams
+			| setfileposition
+			| setflat
+			| setfont
+			| setglobal
+			| setgray
+			| setgstate
+			| sethalftonephase
+			| sethalftone
+			| sethsbcolor
+			| setlinecap
+			| setlinejoin
+			| setlinewidth
+			| setmatrix
+			| setmiterlimit
+			| setobjectformat
+			| setoverprint
+			| setpacking
+			| setpagedevice
+			| setpattern
+			| setrgbcolor
+			| setscreen
+			| setshared
+			| setstrokeadjust
+			| setsystemparams
+			| settransfer
+			| setucacheparams
+			| setundercolorremoval
+			| setuserparams
+			| setvmthreshold
+			| shareddict
+			| showpage
+			| show
+			| sin
+			| sqrt
+			| srand
+			| stackoverflow
+			| stackunderflow
+			| stack
+			| startjob
+			| start
+			| statusdict
+			| status
+			| stopped
+			| stop
+			| store
+			| stringwidth
+			| string
+			| strokepath
+			| stroke
+			| sub
+			| syntaxerror
+			| systemdict
+			| timeout
+			| token
+			| transform
+			| translate
+			| true
+			| truncate
+			| typecheck
+			| type
+			| uappend
+			| ucachestatus
+			| ucache
+			| ueofill
+			| ufill
+			| undefinedfilename
+			| undefinedresource
+			| undefinedresult
+			| undefined
+			| undefinefont
+			| undefineresource
+			| undefineuserobject
+			| undef
+			| unmatchedmark
+			| unregistered
+			| upath
+			| userdict
+			| usertime
+			| ustrokepath
+			| ustroke
+			| version
+			| viewclippath
+			| viewclip
+			| vmreclaim
+			| vmstatus
+			| wait
+			| wcheck
+			| where
+			| widthshow
+			| writehexstring
+			| writeobject
+			| writestring
+			| write
+			| wtranslation
+			| xcheck
+			| xor
+			| xshow
+			| xyshow
+			| yield
+			| yshow
+			) \\b
+		"""
+
+
+	# Procedure/subroutine
+	procedure:
+		name:  "meta.procedure.postscript"
+		begin: "{"
+		end:   "}"
+		beginCaptures: 0: name: "punctuation.definition.procedure.begin.postscript"
+		endCaptures:   0: name: "punctuation.definition.procedure.end.postscript"
+		patterns: [include: "#main"]
+
+
+	# Number with explicit radix
+	radix:
+		name: "constant.numeric.radix.postscript"
+		match: "[0-3]?[0-9]#[0-9a-zA-Z]+"
+
+
+	# (Strings (denoted by (balanced) (brackets)))
+	string:
+		name:  "string.other.postscript"
+		begin: "\\("
+		end:   "\\)"
+		beginCaptures: 0: name: "punctuation.definition.string.begin.postscript"
+		endCaptures:   0: name: "punctuation.definition.string.end.postscript"
+		patterns: [include: "#stringInnards"]
+
+	stringInnards:
+		patterns: [{
+			name:  "constant.numeric.octal.postscript"
+			match: "\\\\[0-7]{1,3}"
+		},{
+			name:  "constant.character.escape.postscript"
+			match: "\\\\(\\\\|[bfnrt()]|[0-7]{1,3}|\\r?\\n)"
+		},{
+			name:  "invalid.illegal.unknown-escape.postscript.ignored"
+			match: "\\\\"
+		},{
+			begin: "\\("
+			end:   "\\)"
+			patterns: [include: "#stringInnards"]
+		}]

@@ -1,0 +1,27 @@
+".source.postscript":
+	core:
+		fileEncoding: "iso88591"
+	editor:
+		increaseIndentPattern: "(?:[{\\[]|<[~<]?)\\s*$"
+		decreaseIndentPattern: "^\\s*(?:[}\\]]|[~>]?>)"
+		commentStart: "% "
+	"bracket-matcher":
+		autocompleteCharacters: [
+			"()"
+			"[]"
+			"{}"
+			'""'
+			"''"
+			"``"
+			"“”"
+			"‘’"
+			"«»"
+			"‹›"
+			"<>"
+		]
+		pairsWithExtraNewline: [
+			"()"
+			"[]"
+			"{}"
+			"<>"
+		]
