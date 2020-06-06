@@ -1,16 +1,16 @@
 {
-	"name": "postscript-preview",
+	"name": "postscript",
 	"version": "0.0.0",
-	"description": "Live preview of PostScript/EPS files using GhostScript",
+	"description": "Syntax highlighting and live previews of PostScript/EPS files",
 	"author": "John Gardner <gardnerjohng@gmail.com>",
-	"repository": "https://github.com/Alhadis/Atom-PostScriptPreview",
+	"repository": "https://github.com/Alhadis/Atom-PostScript",
 	"main": "./lib/index",
 	"license": "ISC",
 	"keywords": ["PostScript", "GhostScript", "EPS", "Adobe", "live-preview"],
 	"engines": {
 		"atom": ">=1.25.0"
 	},
-	"package-deps": ["file-icons", "language-postscript"],
+	"package-deps": ["file-icons"],
 	"dependencies": {
 		"atom-live-view": "*",
 		"pan-and-zoom": "^1.0.0"
