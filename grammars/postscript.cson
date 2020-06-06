@@ -79,14 +79,14 @@ injections:
 			}]
 		},{
 			# Objects
-			match: "\\b(obj)\\s*(?=<<|$)|(?<=^|\\n|>>)(endobj)"
+			match: "(?<![^/\\s{}()<>\\[\\]%])\\b(obj)\\s*(?=<<|$)|(?<=^|\\n|>>)(endobj)"
 			captures:
 				1: name: "keyword.control.object.begin.pdf"
 				2: name: "keyword.control.object.end.pdf"
 		},{
 			# Trailer
 			name:  "keyword.control.$1.pdf"
-			match: "\\b(trailer|startxref)\\b"
+			match: "(?<![^/\\s{}()<>\\[\\]%])\\b(trailer|startxref)(?![^/\\s{}()<>\\[\\]%])"
 		}]
 
 
@@ -307,7 +307,7 @@ repository:
 		patterns: [{
 			# Base85-encoded
 			name:  "meta.encrypted-source.base85.postscript"
-			begin: "\\b(currentfile)\\s*((/)ASCII85Decode)\\s+(filter)\\b([^}>\\]%]*?(?:exec|image|readstring)\\s*)$\\s*+"
+			begin: "(?<![^/\\s{}()<>\\[\\]%])\\b(currentfile)\\s*((/)ASCII85Decode)\\s+(filter)\\b(?![^/\\s{}()<>\\[\\]%])([^}>\\]%]*?(?:exec|image|readstring)\\s*)$\\s*+"
 			end:   "~>|(?=cleartomark|closefile)"
 			contentName: "string.other.base85.postscript"
 			beginCaptures:
@@ -321,8 +321,8 @@ repository:
 		},{
 			# `eexec` encryption, typically found only in Type 1 font programs
 			name:  "meta.encrypted-source.eexec.postscript"
-			begin: "\\b(currentfile)\\s+(eexec)(?:$|(?=.*[\\0-\\x08\\x14-\\x31\\x7F\\x80-\\x9F])(?=.{0,3}?[^A-Fa-f0-9]|\\b[A-Fa-f0-9]))"
-			end:   "(cleartomark|closefile)\\b|(?<=\\G)(?=[^\\s0-9A-Fa-f])"
+			begin: "(?<![^/\\s{}()<>\\[\\]%])\\b(currentfile)\\s+(eexec)(?:$|(?=.*[\\0-\\x08\\x14-\\x31\\x7F\\x80-\\x9F])(?=.{0,3}?[^A-Fa-f0-9]|\\b[A-Fa-f0-9]))"
+			end:   "(cleartomark|closefile)\\b(?![^/\\s{}()<>\\[\\]%])|(?<=\\G)(?=[^\\s0-9A-Fa-f])"
 			beginCaptures:
 				1: name: "keyword.operator.postscript"
 				2: name: "keyword.operator.postscript"
@@ -417,7 +417,7 @@ repository:
 	# Built-ins
 	operators:
 		name: "keyword.operator.postscript"
-		match: """(?x) \\b
+		match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) \\b
 			( FontDirectory
 			| GlobalFontDirectory
 			| ISOLatin1Encoding
@@ -800,7 +800,7 @@ repository:
 			| xyshow
 			| yield
 			| yshow
-			) \\b
+			) \\b (?![^/\\s{}()<>\\[\\]%])
 		"""
 
 
