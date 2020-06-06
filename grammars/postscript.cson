@@ -106,7 +106,6 @@ repository:
 			{include: "#operators"}
 			{include: "#embeddedRow"}
 			{include: "#names"}
-			{include: "#cr"}
 		]
 
 
@@ -131,12 +130,6 @@ repository:
 			name: "invalid.illegal.base85.char.postscript"
 			match: "(?:[^<!-uz\\s]|<(?!~))++"
 		]
-
-	
-	# Carriage return, sometimes found in old PostScript
-	cr:
-		name: "carriage-return.postscript"
-		match: "\\r(?!\\n)"
 
 
 	# % Commented line
@@ -338,12 +331,9 @@ repository:
 			patterns: [{
 				begin: "\\G(?=\\s*$)"
 				end:   "(?=\\s*\\S)"
-				patterns: [include: "#cr"]
 			},{
-				begin: "(?:\\G|(?<=\\n|^))(\\s*)(?=\\S)"
+				begin: "(?:\\G|(?<=\\n|^))\\s*(?=\\S)"
 				end:   "(?!\\G)"
-				beginCaptures:
-					1: patterns: [include: "#cr"]
 				patterns: [{
 					# Raw binary
 					# - TODO: Find out how PostScript engines differentiate between a
@@ -352,13 +342,11 @@ repository:
 					begin: "\\G(?!cleartomark|closefile)(?=.{0,3}?[^A-Fa-f0-9])"
 					end:   "(?=\\s*(?:cleartomark|closefile))"
 					contentName: "sublimelinter.gutter-mark"
-					patterns: [include: "#cr"]
 				},{
 					# Hexadecimal
 					name:  "string.other.hexadecimal.postscript"
 					begin: "\\G(?!cleartomark|closefile)(?=\\s{0,3}?(?:[A-Fa-f0-9]))"
 					end:   "(?=\\s*[^A-Fa-f0-9\\s]|cleartomark|closefile)"
-					patterns: [include: "#cr"]
 				}]
 			}]
 		}]
