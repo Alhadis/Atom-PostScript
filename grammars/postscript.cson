@@ -128,7 +128,7 @@ repository:
 		endCaptures:   0: name: "punctuation.definition.string.end.postscript"
 		patterns: [
 			name: "invalid.illegal.base85.char.postscript"
-			match: "(?:[^<!-uz\\s]|<(?!~))++"
+			match: "(?:[^!-uz\\s]|~(?!>))++"
 		]
 
 
