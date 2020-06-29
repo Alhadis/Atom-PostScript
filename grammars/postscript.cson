@@ -250,7 +250,6 @@ repository:
 			| OperatorIntervention
 			| OperatorMessage
 			| Orientation
-			| Page
 			| PageBoundingBox
 			| PageCustomColors
 			| PageFiles
@@ -263,6 +262,7 @@ repository:
 			| PageResources
 			| PageTrailer
 			| Pages
+			| Page
 			| PaperColor
 			| PaperForm
 			| PaperSize
