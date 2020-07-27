@@ -675,6 +675,7 @@ repository:
 			| packedarray
 			| pathbbox
 			| pathforall
+			| pdfmark
 			| pop
 			| printobject
 			| print
