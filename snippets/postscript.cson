@@ -1,0 +1,73 @@
+".source.postscript":
+	"If condition":
+		prefix: "if"
+		body: """
+			${1:true} {
+				$0
+			} if
+		"""
+
+	"If/else condition":
+		prefix: "ife"
+		body: """
+			${1:true} {
+				${2:then}
+			} {
+				${3:else}
+			} ifelse
+			$0
+		"""
+
+	Function:
+		prefix: "fn"
+		body: """
+			/${1:name} {
+				$0
+			} bind def
+		"""
+
+	"For loop":
+		prefix: "for"
+		body: """
+			${1:initial} ${2:increment} ${3:limit} {
+				$0
+			} for
+		"""
+
+	"For/each loop":
+		prefix: "each"
+		body: """
+			{
+				$0
+			} forall
+		"""
+
+	"Page example":
+		prefix: "page"
+		body: """
+			%!PS
+			/Times-Roman findfont 10 scalefont setfont
+			${2:100} ${3:300} moveto
+			(${1:Hello, world.}) show
+			$0
+			showpage
+		"""
+
+	"PDFmark, Shim":
+		prefix: "pdfshim"
+		leftLabel: "PDFMark: Shim"
+		description: "Compatibility code for PostScript engines that don't support the PDFMark extension."
+		descriptionMoreURL: "https://www.adobe.com/content/dam/acom/en/devnet/acrobat/pdfs/pdfmark_reference.pdf#page=10"
+		body: """
+			%%BeginProlog
+			/pdfmark where
+				{ pop }
+				{
+					/globaldict where
+						{ pop globaldict }
+						{ userdict }
+					ifelse
+					/pdfmark /cleartomark load put
+				} ifelse
+			%%EndProlog
+		"""
