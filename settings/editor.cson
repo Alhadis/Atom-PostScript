@@ -2,6 +2,7 @@
 	core:
 		fileEncoding: "iso88591"
 	editor:
+		nonWordCharacters: "\\()\"':,;<>~!@#$%^&*|+=[]{}`?-…"
 		increaseIndentPattern: "(?:[{\\[]|<[~<]?)\\s*$"
 		decreaseIndentPattern: "^\\s*(?:[}\\]]|[~>]?>)"
 		commentStart: "% "
@@ -25,3 +26,8 @@
 			"{}"
 			"<>"
 		]
+
+".source.postscript .comment,
+ .source.postscript .string":
+	editor:
+		nonWordCharacters: "/\\()\"':,.;<>~!@#$%^&*|+=[]{}`?-…"
