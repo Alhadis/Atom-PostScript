@@ -41,7 +41,7 @@ patterns: [{
 
 injections:
 	# PDF-specific elements
-	"L:source.postscript meta.document.pdf - (meta.encrypted-source | text.embedded)":
+	"L:source.postscript meta.document.pdf - (meta.encrypted-source | source.embedded | text.embedded)":
 		patterns: [{
 			# Binary streams
 			name:  "meta.encrypted-source.stream.pdf"
