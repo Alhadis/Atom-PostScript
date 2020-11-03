@@ -53,6 +53,29 @@
 			showpage
 		"""
 
+	"Page size":
+		prefix: "size"
+		leftLabel: "Page size"
+		description: "Retrieve the dimensions of the current page"
+		body: """
+			currentpagedevice /PageSize get dup
+			0 get /PageWidth  exch def
+			1 get /PageHeight exch def
+			$0
+		"""
+
+	"Page width":
+		prefix: "width"
+		leftLabel: "Page width"
+		description: "Retrieve the width of the current page"
+		body: "currentpagedevice /PageSize get 0 get $0"
+
+	"Page height":
+		prefix: "height"
+		leftLabel: "Page height"
+		description: "Retrieve the height of the current page"
+		body: "currentpagedevice /PageSize get 1 get $0"
+
 	"PDFmark, Shim":
 		prefix: "pdfshim"
 		leftLabel: "PDFMark: Shim"
