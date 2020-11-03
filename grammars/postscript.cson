@@ -305,6 +305,15 @@ repository:
 	# Encrypted PostScript sections
 	embedded:
 		patterns: [{
+			# `readline` from `currentfile`
+			contentName: "string.unquoted.heredoc.postscript"
+			begin: "(?<![^/\\s{}()<>\\[\\]%])\\b(currentfile)\\s+((?=\\S)[^{}%]+?)\\s+(readline)(?!\\s*})\\b(?![^/\\s{}()<>\\[\\]%])(?:$\\s*)?"
+			end:   "(?!\\G)$"
+			beginCaptures:
+				1: name: "keyword.operator.postscript"
+				2: patterns: [include: "#main"]
+				3: name: "keyword.operator.postscript"
+		},{
 			# Base85-encoded
 			name:  "meta.encrypted-source.base85.postscript"
 			begin: "(?<![^/\\s{}()<>\\[\\]%])\\b(currentfile)\\s*((/)ASCII85Decode)\\s+(filter)\\b(?![^/\\s{}()<>\\[\\]%])([^}>\\]%]*?(?:exec|image|readstring)\\s*)$\\s*+"
