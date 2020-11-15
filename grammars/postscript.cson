@@ -1,6 +1,6 @@
 name: "PostScript"
 scopeName: "source.postscript"
-fileTypes: ["ps", "eps", "epsf", "epsi", "gsf", "pfa", "pfb", "t1", "t42", "ai", "pdf"]
+fileTypes: ["ps", "eps", "epsf", "epsi", "gsf", "pfa", "pfb", "t1", "t42", "ai", "pdf", "joboptions", "Fontmap"]
 firstLineMatch: """(?x)
 	# Signature
 	\\A%(?:!|PDF)
