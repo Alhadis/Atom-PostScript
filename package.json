@@ -12,7 +12,7 @@
 	},
 	"package-deps": ["file-icons"],
 	"dependencies": {
-		"atom-live-view": "*",
+		"atom-live-view": "Alhadis/Atom-LiveView",
 		"pan-and-zoom": "^1.0.0"
 	},
 	"deserializers": {
