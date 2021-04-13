@@ -94,3 +94,18 @@
 				} ifelse
 			%%EndProlog
 		"""
+
+	"Print Ascii85-encoded data":
+		prefix: "85"
+		leftLabel: "ASCII85: Print"
+		description: "Print an Ascii85-encoded representation of a string."
+		body: """
+			(%stdout) (w) file
+				dup (<~) print
+				dup /ASCII85Encode filter
+				dup (${1:Foo\\\\n}) writestring
+				closefile
+				() = flush
+			closefile
+			$0
+		"""
