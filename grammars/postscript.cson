@@ -104,6 +104,7 @@ repository:
 			{include: "#number"}
 			{include: "#embedded"}
 			{include: "#operators"}
+			{include: "#extensions"}
 			{include: "#embeddedRow"}
 			{include: "#names"}
 		]
@@ -381,6 +382,68 @@ repository:
 			endCaptures:
 				0: name: "punctuation.definition.string.end.postscript"
 		}]
+
+
+	# GhostScript extensions to the PostScript language
+	# file:///Users/Alhadis/Forks/GhostScript/doc/Language.htm#Additional_operators
+	extensions:
+		name: "keyword.operator.ghostscript.postscript"
+		match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) (?:\\b|(?=\\.))
+			( \\.activatepathcontrol
+			| \\.addcontrolpath
+			| \\.begintransparencygroup
+			| \\.begintransparencymaskgroup
+			| \\.bind
+			| \\.bindnow
+			| \\.currentalphaisshape
+			| \\.currentblendmode
+			| \\.currentfillconstantalpha
+			| \\.currentopacityalpha
+			| \\.currentoverprintmode
+			| \\.currentpathcontrolstate
+			| \\.currentshapealpha
+			| \\.currentstrokeconstantalpha
+			| \\.currenttextknockout
+			| \\.dicttomark
+			| \\.endtransparencygroup
+			| \\.endtransparencymask
+			| \\.fileposition
+			| \\.genordered
+			| \\.knownget
+			| \\.locksafe
+			| \\.popdf14devicefilter
+			| \\.pushpdf14devicefilter
+			| \\.setalphaisshape
+			| \\.setblendmode
+			| \\.setdebug
+			| \\.setfillconstantalpha
+			| \\.setopacityalpha
+			| \\.setoverprintmode
+			| \\.setsafe
+			| \\.setshapealpha
+			| \\.setstrokeconstantalpha
+			| \\.settextknockout
+			| \\.shellarguments
+			| \\.tempfile
+			| %Type1BuildChar
+			| %Type1BuildGlyph
+			| arccos
+			| arcsin
+			| copydevice
+			| copyscanlines
+			| currentdevice
+			| finddevice
+			| findlibfile
+			| findprotodevice
+			| getdeviceprops
+			| getenv
+			| makeimagedevice
+			| max
+			| min
+			| putdeviceprops
+			| setdevice
+			) \\b (?![^/\\s{}()<>\\[\\]%])
+		"""
 
 
 	# Hexadecimal data: < … >
