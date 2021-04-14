@@ -42,6 +42,30 @@
 			} forall
 		"""
 
+	"File handle":
+		prefix: "file"
+		leftLabel: "Files"
+		description: "Open a filename for reading or writing"
+		body: "(${1:path}) (${2:r}) file$0"
+
+	"Standard input":
+		prefix: "in"
+		leftLabel: "Files"
+		description: "Return handle for stdin"
+		body: "(%stdin) (r) file"
+	
+	"Standard output":
+		prefix: "out"
+		leftLabel: "Files"
+		description: "Return handle for stdout"
+		body: "(%stdout) (w) file"
+
+	"Standard error":
+		prefix: "err"
+		leftLabel: "Files"
+		description: "Return handle for stderr"
+		body: "(%stderr) (w) file"
+
 	"Page example":
 		prefix: "page"
 		body: """
