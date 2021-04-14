@@ -1,0 +1,77 @@
+%!PS -*- truncate-lines: t -*- vim:set nowrap:
+
+% Special files
+(%cartridge0%file) ... (%cartridge9%file)
+(%device)
+(%device%)
+(%device%file)
+(%disk0%file)      ... (%disk9%file)
+(%lineedit)
+(%statementedit)
+(%os%file)
+(%stderr)
+(%stdin)
+(%stdout)
+
+%%
+%% GhostScript extensions to the PostScript language
+%%
+.activatepathcontrol        %                                                       .activatepathcontrol
+.addcontrolpath             %                                       <name> <string> .addcontrolpath
+.begintransparencygroup     %                   <paramdict> <llx> <lly> <urx> <ury> .begintransparencygroup     -
+.begintransparencymaskgroup %         <cs_set?> <paramdict> <llx> <lly> <urx> <ury> .begintransparencymaskgroup -
+.bind                       %                                               <array> .bind                       <array>
+.bindnow                    %                                                     - .bindnow                    -
+.currentalphaisshape        %                                                     - .currentalphaisshape        <0..1>
+.currentblendmode           %                                                     - .currentblendmode           <modename>
+.currentfillconstantalpha   %                                                     - .currentfillconstantalpha   <0..1>
+.currentopacityalpha        % [Deprecated as of 9.53]                             - .currentopacityalpha        <0..1>
+.currentoverprintmode       %                                                     - .currentoverprintmode       <int>
+.currentpathcontrolstate    %                                                       .currentpathcontrolstate
+.currentshapealpha          % [Deprecated as of 9.53]                             - .currentshapealpha          <0..1>
+.currentstrokeconstantalpha %                                                     - .currentstrokeconstantalpha <0..1>
+.currenttextknockout        %                                              <bool> - .currenttextknockout        <bool>
+.dicttomark                 %              mark <key1> <value1> <key2> <value2> ... .dicttomark                 <dict>
+.endtransparencygroup       %                                                     - .endtransparencygroup       -
+.endtransparencymask        %                                               <mask#> .endtransparencymask        -
+.fileposition               %                                                <file> .fileposition               <integer> true
+.genordered                 %                                                <dict> .genordered                 <array> (/OutputType /TOSArray).
+.genordered                 %                                                <dict> .genordered                 <dict> (default: /OutputType /Type3).
+.genordered                 %                                                <dict> .genordered                 <string> (/OutputType /ThreshString).
+.knownget                   %                                          <dict> <key> .knownget                   <value> true
+.knownget                   %                                          <dict> <key> .knownget                   false
+.locksafe                   %                                                     - .locksafe                   -
+.popdf14devicefilter        %                                                     - .popdf14devicefilter        -
+.pushpdf14devicefilter      %                                               <depth> .pushpdf14devicefilter      -
+.setalphaisshape            %                                                <bool> .setalphaisshape            -
+.setblendmode               %                                            <modename> .setblendmode               -
+.setdebug                   %                                    <string> <boolean> .setdebug                   -
+.setfillconstantalpha       %                                                <0..1> .setfillconstantalpha       -
+.setopacityalpha            % [Deprecated as of 9.53]                        <0..1> .setopacityalpha            -
+.setoverprintmode           %                                                 <int> .setoverprintmode           -
+.setsafe                    %                                                     - .setsafe                    -
+.setshapealpha              % [Deprecated as of 9.53]                        <0..1> .setshapealpha              -
+.setstrokeconstantalpha     %                                                <0..1> .setstrokeconstantalpha     -
+.settextknockout            %                                                <bool> .settextknockout            -
+.shellarguments             %                                                       .shellarguments
+.tempfile                   %                  <prefix_string|null> <access_string> .tempfile                   <string> <file>
+%Type1BuildChar             %                                     <font> <charcode> %Type1BuildChar             -
+%Type1BuildGlyph            %                                     <font> <charname> %Type1BuildGlyph            -
+arccos                      %                                              <number> arccos                      <number>
+arcsin                      %                                              <number> arcsin                      <number>
+bind                        %                                               <array> bind                        <array>
+copydevice                  %                                              <device> copydevice                  <device>
+copyscanlines               %                             <device> <index> <string> copyscanlines               <substring>
+currentdevice               %                                                     - currentdevice               <device>
+finddevice                  %                                          <devicename> finddevice                  <device>
+findlibfile                 %                                              <string> findlibfile                 <foundstring> <file> true
+findlibfile                 %                                              <string> findlibfile                 <string> false
+findprotodevice             %                                          <devicename> findprotodevice             <device>
+getdeviceprops              %                                              <device> getdeviceprops              <mark> <name1> <value1> ... <namen> <valuen>
+getenv                      %                                              <string> getenv                      <string> true
+getenv                      %                                              <string> getenv                      false
+makeimagedevice             %                   <matrix> <width> <height> <palette> makeimagedevice             <device>
+max                         %                       <number|string> <number|string> max                         <number|string>
+min                         %                       <number|string> <number|string> min                         <number|string>
+putdeviceprops              % <mark> <name1> <value1> ... <namen> <valuen> <device> putdeviceprops              <device>
+setdevice                   %                                              <device> setdevice                   -

@@ -943,6 +943,32 @@ repository:
 		match: "[0-3]?[0-9]#[0-9a-zA-Z]+"
 
 
+	# “Special” files
+	specialFiles:
+		patterns: [{
+			# %device%file
+			name: "constant.language.device-name.$2-device.postscript"
+			match: "\\G(%)([-\\w]+)(?=%|\\)|$)(%)?"
+			captures:
+				1: name: "punctuation.definition.device-name.begin.postscript"
+				3: name: "punctuation.definition.device-name.end.postscript"
+		},{
+			# Usual stdio(3) streams
+			name: "constant.language.special-file.stdio.$2.postscript"
+			match: "\\G(%)(stderr|stdin|stdout)(?=\\)|$)"
+			captures:
+				1: name: "punctuation.definition.special-file.begin.postscript"
+				3: name: "punctuation.definition.special-file.end.postscript"
+		},{
+			# Special files related to interactive execution
+			name: "constant.language.special-file.interactive.$2.postscript"
+			match: "\\G(%)(lineedit|statementedit)(?=\\)|$)"
+			captures:
+				1: name: "punctuation.definition.special-file.begin.postscript"
+				3: name: "punctuation.definition.special-file.end.postscript"
+		}]
+
+
 	# (Strings (denoted by (balanced) (brackets)))
 	string:
 		name:  "string.other.postscript"
@@ -954,6 +980,8 @@ repository:
 
 	stringInnards:
 		patterns: [{
+			include: "#specialFiles"
+		},{
 			name:  "constant.numeric.octal.postscript"
 			match: "\\\\[0-7]{1,3}"
 		},{
