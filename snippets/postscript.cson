@@ -42,6 +42,18 @@
 			} forall
 		"""
 
+	"Try/Catch":
+		prefix: "try"
+		body: """
+			{
+				${1:try}
+			} stopped {
+				\\$error /newerror false put
+				${2:catch}
+			} if
+			$0
+		"""
+
 	"File handle":
 		prefix: "file"
 		leftLabel: "Files"
