@@ -27,3 +27,28 @@
 		margin: 1em;
 	}
 }
+
+// Seti UI polishes
+.theme-seti-syntax{
+	.syntax--source.syntax--postscript{
+		.syntax--variable.syntax--other{
+			&.syntax--literal    {color: #a074c4; }
+			&.syntax--executable {color: #7494a3; }
+		}
+		.syntax--string.syntax--other{
+			color: #9ac4d7;
+			
+			&.syntax--hexadecimal,
+			&.syntax--base85{
+				color: #a074c4;
+				
+				.syntax--punctuation{
+					color: #4d5a5e;
+				}
+			}
+		}
+		.syntax--punctuation.syntax--definition.syntax--array{
+			color: #4d5a5e;
+		}
+	}
+}
