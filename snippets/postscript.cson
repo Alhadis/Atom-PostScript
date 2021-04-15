@@ -42,7 +42,7 @@
 			} forall
 		"""
 
-	"Try/Catch":
+	"Try/catch block":
 		prefix: "try"
 		body: """
 			{
@@ -143,5 +143,17 @@
 				closefile
 				() = flush
 			closefile
+			$0
+		"""
+
+	"Decode string":
+		prefix: "decode"
+		description: "Apply an arbitrary decoding filter to a string."
+		leftLabel: "General"
+		body: """
+			(${1:STRING TO DECODE})
+			dup length exch 0 () /SubFileDecode filter
+			${2:/DecodingFilter} filter exch
+			string readstring pop
 			$0
 		"""
