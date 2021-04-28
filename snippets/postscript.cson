@@ -54,6 +54,11 @@
 			$0
 		"""
 
+	Arguments:
+		prefix: "args"
+		description: "ARGV array (GhostScript extension)"
+		body: "userdict /ARGUMENTS 2 copy known {get} {[]} ifelse"
+
 	"File handle":
 		prefix: "file"
 		leftLabel: "Files"
