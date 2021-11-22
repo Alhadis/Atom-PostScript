@@ -4,14 +4,21 @@ fileTypes: [
 	"ps"
 	"eps", "epsf", "epsi"
 	"gsf", "pfa", "pfb", "t1", "t42"
-	"ai", "pdf"
+	"ai", "aia", "pdf"
 	"joboptions"
+	"AIAppResources"
+	"Adobe Illustrator Cloud Prefs"
+	"Adobe Illustrator Prefs"
+	"Tools Panel Presets"
 	"cidfmap", "Fontmap", "Fontmap.GS", "xlatmap"
 	"PPI_CUtils", "Pscript5Idiom"
 ]
 firstLineMatch: """(?x)
 	# Signature
 	\\A%(?:!|PDF)
+	|
+	# Adobe Illustrator preferences
+	\\A/(?:Menus|collection1)\\ {(?:\\r|$)
 	|
 	# Best guess for extensionless files distributed with GhostScript
 	(?i:\\A%+\\s+Copyright\\s+\\(C\\)\\s+([-\\d]+),?\\s+Artifex\\sSoftware\\b)
@@ -48,9 +55,31 @@ patterns: [{
 	begin: "\\A(?=%PDF)"
 	end:   "(?=A)B"
 	patterns: [include: "#main"]
+},{
+	name:  "meta.ai-prefs.postscript"
+	begin: "\\A(?=/(?:Menus|collection1) {(?:\\r|$))"
+	end:   "(?=A)B"
+	patterns: [include: "#main"]
 }, include: "#main"]
 
+# Corrections for faux-PostScript highlighting
 injections:
+	# Adobe Illustrator preferences
+	"L:source.postscript meta.ai-prefs.postscript - (comment | string | source.embedded | text.embedded)":
+		patterns: [{
+			# /This\ escape\ sequence\ syntax\ doesn't\ normally\ work
+			name:  "variable.other.constant.literal.postscript"
+			match: "(/)((?:\\\\.|[^()<>\\[\\]{}/%\\s])*)"
+			captures:
+				1: name: "punctuation.definition.name.postscript"
+				2: patterns: [{
+					name: "constant.character.escape.postscript"
+					match: "(\\\\)."
+					captures:
+						1: name: "punctuation.definition.escape.backslash.postscript"
+				}]
+		}]
+	
 	# PDF-specific elements
 	"L:source.postscript meta.document.pdf - (meta.encrypted-source | source.embedded | text.embedded)":
 		patterns: [{
