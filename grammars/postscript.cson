@@ -57,7 +57,7 @@ patterns: [{
 	patterns: [include: "#main"]
 },{
 	name:  "meta.ai-prefs.postscript"
-	begin: "\\A(?=/(?:Menus|collection1) {(?:\\r|$))"
+	begin: "\\A(?=/(?:(?:Menus|collection1|precision) {|textImportantVisualLinesSnapping \\d)(?:\\r|$))"
 	end:   "(?=A)B"
 	patterns: [include: "#main"]
 }, include: "#main"]
@@ -67,6 +67,24 @@ injections:
 	# Adobe Illustrator preferences
 	"L:source.postscript meta.ai-prefs.postscript - (comment | string | source.embedded | text.embedded)":
 		patterns: [{
+			# /hexEncodedSetting [ length … hex-bytes ]
+			name:  "meta.obfuscated-setting.ai-prefs.postscript"
+			begin: "^\\s*(/(?:\\\\.|[^()<>\\[\\]{}/%\\s])*) ((\\[) (?!0\\b)(\\d+)(?:$|\\r))"
+			end:   "^\\s*(\\])|\\G(?!$)|(?!\\G)^(?!\\s*(?:\\]|[A-Fa-f0-9]+$))"
+			contentName: "meta.array.postscript"
+			beginCaptures:
+				1: patterns: [include: "$self"]
+				2: name: "meta.array.postscript"
+				3: name: "punctuation.definition.array.begin.postscript"
+				4: name: "constant.numeric.postscript"
+			endCaptures:
+				0: name: "meta.array.postscript"
+				1: name: "punctuation.definition.array.end.postscript"
+			patterns: [{
+				name: "string.other.hexadecimal.postscript"
+				match: "[A-Fa-f0-9]+"
+			}]
+		},{
 			# /This\ escape\ sequence\ syntax\ doesn't\ normally\ work
 			name:  "variable.other.constant.literal.postscript"
 			match: "(/)((?:\\\\.|[^()<>\\[\\]{}/%\\s])*)"
@@ -78,6 +96,10 @@ injections:
 					captures:
 						1: name: "punctuation.definition.escape.backslash.postscript"
 				}]
+		},{
+			# Presumably a long integer: 65535L
+			name:  "constant.numeric.integer.long.postscript"
+			match: "[0-9]+L"
 		}]
 	
 	# PDF-specific elements
