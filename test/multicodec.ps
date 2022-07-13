@@ -1,0 +1,37 @@
+/multicodec.dict << >> def
+
+/multicodec.split {  %( str -- int str )
+	0 0 1 8 {
+		2 index 1 index get
+		dup 16#7F and 2 index 7 mul bitshift 4 -1 roll or 3 1 roll
+		128 ge {pop} {1 add exit} ifelse
+	} for
+	3 -1 roll exch
+	1 index length 1 index sub getinterval
+} bind def
+
+/multicodec.make {  %( int str -- str )
+	exch dup 2 64 string cvrs length 6 add 7 idiv
+	dup 3 index length add string
+	dup 3 -1 roll 5 -1 roll putinterval
+	exch 0 1 8 {
+		1 index 0 eq {pop pop exit} if
+		2 index exch 2 index
+		dup 128 ge {16#80 or 16#FF and} {16#7F and} ifelse put
+		-7 bitshift
+	} for
+} bind def
+
+<< /Q 256 string >> begin {
+	end
+	currentfile //Q readline pop pop  % discard header line
+	{
+		currentfile //Q readline
+		not {pop exit} if
+		( 0x) search pop exch 0 (16#) putinterval
+		exch (,) search pop length 3 add exch pop exch pop
+		//Q exch 2 index length exch getinterval cvi
+		exch (,) search pop exch pop exch pop cvn
+		//multicodec.dict 3 1 roll 3 copy exch put put
+	} loop
+} bind exec
