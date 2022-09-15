@@ -13,7 +13,7 @@
 	"package-deps": ["file-icons"],
 	"dependencies": {
 		"atom-live-view": "Alhadis/Atom-LiveView",
-		"pan-and-zoom": "^1.0.0"
+		"pan-and-zoom": "v1.0.0"
 	},
 	"deserializers": {
 		"PostScriptPreviewView": "createPreviewView"
