@@ -39,6 +39,13 @@
 			"default": 300,
 			"minimum": 72,
 			"description": "Resolution of rendered images, expressed in DPI."
+		},
+		"command": {
+			"order": 4,
+			"title": "Command name",
+			"type": "string",
+			"default": "",
+			"description": "GhostScript executable used by previewer. If blank, defaults to `gs` (POSIX) or `gswin64` (Windows). **Requires restart if changed.**"
 		}
 	}
 }
