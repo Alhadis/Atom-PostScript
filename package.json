@@ -3,8 +3,8 @@
 	"version": "0.0.0",
 	"description": "Syntax highlighting and live previews of PostScript/EPS files",
 	"author": "John Gardner <gardnerjohng@gmail.com>",
-	"repository": "https://github.com/Alhadis/Atom-PostScript",
-	"main": "./lib/index",
+	"repository": "https://github.com/Alhadis/Atom-PostScript.git",
+	"main": "./lib/index.js",
 	"license": "ISC",
 	"keywords": ["PostScript", "GhostScript", "EPS", "Adobe", "live-preview"],
 	"engines": {
