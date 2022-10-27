@@ -3,7 +3,7 @@ scopeName: "source.postscript"
 fileTypes: [
 	"ps"
 	"eps", "epsf", "epsi"
-	"gsf", "pfa", "pfb", "t1", "t42"
+	"gsf", "pfa", "pfb", "t1", "t42", "inf"
 	"ai", "aia", "pdf"
 	"joboptions"
 	"AIAppResources"
@@ -19,6 +19,9 @@ firstLineMatch: """(?x)
 	|
 	# Adobe Illustrator preferences
 	\\A/(?:Menus|collection1)\\ {(?:\\r|$)
+	|
+	# Header field of “.inf” manifests
+	\\AAppleFONDID
 	|
 	# Best guess for extensionless files distributed with GhostScript
 	(?i:\\A%+\\s+Copyright\\s+\\(C\\)\\s+([-\\d]+),?\\s+Artifex\\sSoftware\\b)
