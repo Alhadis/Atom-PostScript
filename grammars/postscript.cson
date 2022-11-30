@@ -456,66 +456,74 @@ repository:
 		}]
 
 
-	# GhostScript extensions to the PostScript language
-	# file:///Users/Alhadis/Forks/GhostScript/doc/Language.htm#Additional_operators
+	# Implementation-specific PostScript operators
 	extensions:
-		name: "keyword.operator.ghostscript.postscript"
-		match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) (?:\\b|(?=\\.))
-			( \\.activatepathcontrol
-			| \\.addcontrolpath
-			| \\.begintransparencygroup
-			| \\.begintransparencymaskgroup
-			| \\.bind
-			| \\.bindnow
-			| \\.currentalphaisshape
-			| \\.currentblendmode
-			| \\.currentfillconstantalpha
-			| \\.currentopacityalpha
-			| \\.currentoverprintmode
-			| \\.currentpathcontrolstate
-			| \\.currentshapealpha
-			| \\.currentstrokeconstantalpha
-			| \\.currenttextknockout
-			| \\.dicttomark
-			| \\.endtransparencygroup
-			| \\.endtransparencymask
-			| \\.fileposition
-			| \\.genordered
-			| \\.knownget
-			| \\.locksafe
-			| \\.popdf14devicefilter
-			| \\.pushpdf14devicefilter
-			| \\.setalphaisshape
-			| \\.setblendmode
-			| \\.setdebug
-			| \\.setfillconstantalpha
-			| \\.setopacityalpha
-			| \\.setoverprintmode
-			| \\.setsafe
-			| \\.setshapealpha
-			| \\.setstrokeconstantalpha
-			| \\.settextknockout
-			| \\.shellarguments
-			| \\.tempfile
-			| %Type1BuildChar
-			| %Type1BuildGlyph
-			| arccos
-			| arcsin
-			| copydevice
-			| copyscanlines
-			| currentdevice
-			| finddevice
-			| findlibfile
-			| findprotodevice
-			| getdeviceprops
-			| getenv
-			| makeimagedevice
-			| max
-			| min
-			| putdeviceprops
-			| setdevice
-			) \\b (?![^/\\s{}()<>\\[\\]%])
-		"""
+		patterns: [{
+			# Acrobat Distiller operators for manipulating PDF conversion settings
+			# https://opensource.adobe.com/dc-acrobat-sdk-docs/library/pdfcreation/index.html#how-distiller-processes-postscript-files
+			name: "keyword.operator.distiller.postscript"
+			match: "(?<![^/\\s{}()<>\\[\\]%])\\b((?:current|set)distillerparams)\\b(?![^/\\s{}()<>\\[\\]%])"
+		},{
+			# GhostScript extensions to the PostScript language
+			# file:///Users/Alhadis/Forks/GhostScript/doc/Language.htm#Additional_operators
+			name: "keyword.operator.ghostscript.postscript"
+			match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) (?:\\b|(?=\\.))
+				( \\.activatepathcontrol
+				| \\.addcontrolpath
+				| \\.begintransparencygroup
+				| \\.begintransparencymaskgroup
+				| \\.bind
+				| \\.bindnow
+				| \\.currentalphaisshape
+				| \\.currentblendmode
+				| \\.currentfillconstantalpha
+				| \\.currentopacityalpha
+				| \\.currentoverprintmode
+				| \\.currentpathcontrolstate
+				| \\.currentshapealpha
+				| \\.currentstrokeconstantalpha
+				| \\.currenttextknockout
+				| \\.dicttomark
+				| \\.endtransparencygroup
+				| \\.endtransparencymask
+				| \\.fileposition
+				| \\.genordered
+				| \\.knownget
+				| \\.locksafe
+				| \\.popdf14devicefilter
+				| \\.pushpdf14devicefilter
+				| \\.setalphaisshape
+				| \\.setblendmode
+				| \\.setdebug
+				| \\.setfillconstantalpha
+				| \\.setopacityalpha
+				| \\.setoverprintmode
+				| \\.setsafe
+				| \\.setshapealpha
+				| \\.setstrokeconstantalpha
+				| \\.settextknockout
+				| \\.shellarguments
+				| \\.tempfile
+				| %Type1BuildChar
+				| %Type1BuildGlyph
+				| arccos
+				| arcsin
+				| copydevice
+				| copyscanlines
+				| currentdevice
+				| finddevice
+				| findlibfile
+				| findprotodevice
+				| getdeviceprops
+				| getenv
+				| makeimagedevice
+				| max
+				| min
+				| putdeviceprops
+				| setdevice
+				) \\b (?![^/\\s{}()<>\\[\\]%])
+			"""
+		}]
 
 
 	# Hexadecimal data: < … >

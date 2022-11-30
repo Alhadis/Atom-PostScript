@@ -117,6 +117,16 @@
 		description: "Retrieve the height of the current page"
 		body: "currentpagedevice /PageSize get 1 get $0"
 
+	"Acrobat Distiller shims":
+		prefix: "distshim"
+		leftLabel: "Distiller: Shim"
+		description: "Compatibility code for PostScript devices that don't support Distiller parameters."
+		descriptionMoreURL: "https://opensource.adobe.com/dc-acrobat-sdk-docs/library/pdfcreation/index.html#how-distiller-processes-postscript-files"
+		body: """
+			/currentdistillerparams where {pop} {userdict /currentdistillerparams {1 dict} put} ifelse
+			/setdistillerparams     where {pop} {userdict /setdistillerparams     {pop}    put} ifelse
+		"""
+
 	"PDFmark, Shim":
 		prefix: "pdfshim"
 		leftLabel: "PDFMark: Shim"
