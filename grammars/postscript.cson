@@ -465,7 +465,7 @@ repository:
 			match: "(?<![^/\\s{}()<>\\[\\]%])\\b((?:current|set)distillerparams)\\b(?![^/\\s{}()<>\\[\\]%])"
 		},{
 			# GhostScript extensions to the PostScript language
-			# file:///Users/Alhadis/Forks/GhostScript/doc/Language.htm#Additional_operators
+			# https://ghostscript.readthedocs.io/en/latest/Language.html#additional-operators-in-ghostscript
 			name: "keyword.operator.ghostscript.postscript"
 			match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) (?:\\b|(?=\\.))
 				( \\.activatepathcontrol
@@ -490,6 +490,16 @@ repository:
 				| \\.genordered
 				| \\.knownget
 				| \\.locksafe
+				| \\.PDFClose
+				| \\.PDFDrawAnnots
+				| \\.PDFDrawPage
+				| \\.PDFFile
+				| \\.PDFInfo
+				| \\.PDFInit
+				| \\.PDFMetadata
+				| \\.PDFPageInfo
+				| \\.PDFPageInfoExt
+				| \\.PDFStream
 				| \\.popdf14devicefilter
 				| \\.pushpdf14devicefilter
 				| \\.setalphaisshape
@@ -511,6 +521,7 @@ repository:
 				| copydevice
 				| copyscanlines
 				| currentdevice
+				| dopdfpages
 				| finddevice
 				| findlibfile
 				| findprotodevice
@@ -519,7 +530,18 @@ repository:
 				| makeimagedevice
 				| max
 				| min
+				| pdfclose
+				| pdfgetpage
+				| pdfopen
+				| pdfshowpage
+				| pdfshowpage_finish
+				| pdfshowpage_init
+				| pdfshowpage_setpage
 				| putdeviceprops
+				| runpdf
+				| runpdfbegin
+				| runpdfend
+				| runpdfpagerange
 				| setdevice
 				) \\b (?![^/\\s{}()<>\\[\\]%])
 			"""
