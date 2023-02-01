@@ -490,6 +490,8 @@ repository:
 				| \\.genordered
 				| \\.knownget
 				| \\.locksafe
+				| \\.max
+				| \\.min
 				| \\.PDFClose
 				| \\.PDFDrawAnnots
 				| \\.PDFDrawPage
@@ -528,8 +530,6 @@ repository:
 				| getdeviceprops
 				| getenv
 				| makeimagedevice
-				| max
-				| min
 				| pdfclose
 				| pdfgetpage
 				| pdfopen
