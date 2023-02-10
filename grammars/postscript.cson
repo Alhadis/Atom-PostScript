@@ -228,7 +228,7 @@ repository:
 	# Operators and procedures defined for backwards compatibility with LanguageLevel 1
 	# https://web.archive.org/web/20041102173710/partners.adobe.com/asn/developer/pdfs/tn/PS3010and3011.Supplement.pdf
 	compatibility:
-		name: "keyword.operator.compatibility.postscript"
+		name: "keyword.operator.level-1.compatibility.postscript"
 		match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) (?:\\b|(?=\\.))
 			( 11x17tray
 			| 11x17
