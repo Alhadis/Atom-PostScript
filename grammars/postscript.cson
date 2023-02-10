@@ -177,6 +177,7 @@ repository:
 			{include: "#embedded"}
 			{include: "#operators"}
 			{include: "#extensions"}
+			{include: "#compatibility"}
 			{include: "#embeddedRow"}
 			{include: "#names"}
 		]
@@ -222,6 +223,97 @@ repository:
 			beginCaptures:
 				0: name: "punctuation.definition.comment.postscript"
 		]
+
+
+	# Operators and procedures defined for backwards compatibility with LanguageLevel 1
+	# https://web.archive.org/web/20041102173710/partners.adobe.com/asn/developer/pdfs/tn/PS3010and3011.Supplement.pdf
+	compatibility:
+		name: "keyword.operator.compatibility.postscript"
+		match: """(?x) (?<![^/\\s{}()<>\\[\\]%]) (?:\\b|(?=\\.))
+			( 11x17tray
+			| 11x17
+			| a3tray
+			| a3
+			| a4small
+			| a4tray
+			| a4
+			| accuratescreens
+			| appletalktype
+			| b5tray
+			| b5
+			| buildtime
+			| byteorder
+			| checkpassword
+			| checkscreen
+			| defaulttimeouts
+			| devdismount
+			| devforall
+			| devformat
+			| devmount
+			| devstatus
+			| diskonline
+			| diskstatus
+			| doprinterrors
+			| dostartpage
+			| dosysstart
+			| duplexmode
+			| emulate
+			| firstside
+			| hardwareiomode
+			| initializedisk
+			| jobname
+			| jobtimeout
+			| ledgertray
+			| ledger
+			| legaltray
+			| legal
+			| lettersmall
+			| lettertray
+			| letter
+			| manualfeedtimeout
+			| manualfeed
+			| margins
+			| mirrorprint
+			| newsheet
+			| note
+			| pagecount
+			| pagemargin
+			| pageparams
+			| pagestackorder
+			| printername
+			| processcolors
+			| ramsize
+			| realformat
+			| resolution
+			| sccbatch
+			| sccinteractive
+			| setaccuratescreens
+			| setdefaulttimeouts
+			| setdoprinterrors
+			| setdostartpage
+			| setdosysstart
+			| setduplexmode
+			| sethardwareiomode
+			| setjobtimeout
+			| setmargins
+			| setmirrorprint
+			| setpagemargin
+			| setpageparams
+			| setpagestackorder
+			| setpage
+			| setprintername
+			| setresolution
+			| setsccbatch
+			| setsccinteractive
+			| setsoftwareiomode
+			| settumble
+			| setuserdiskpercent
+			| softwareiomode
+			| tumble
+			| userdiskpercent
+			| waittimeout
+			) \\b (?![^/\\s{}()<>\\[\\]%])
+		"""
 
 
 	# << … >>
