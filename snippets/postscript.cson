@@ -59,6 +59,35 @@
 		description: "ARGV array (GhostScript extension)"
 		body: "userdict /ARGUMENTS 2 copy known {get} {[]} ifelse"
 
+	internaldict:
+		prefix: "int"
+		description: "Correct invocation of `internaldict` operator."
+		body: "1183615869 internaldict"
+
+	"Dictionary keys":
+		prefix: "keys"
+		leftLabel: "Lists"
+		description: "Return a dictionary's keys as an array."
+		body: """
+			begin
+			currentdict {pop} forall
+			currentdict length array astore
+			end
+			$0
+		"""
+
+	"Dictionary values":
+		prefix: "values"
+		leftLabel: "Lists"
+		description: "Return a dictionary's values as an array."
+		body: """
+			begin
+			currentdict {exch pop} forall
+			currentdict length array astore
+			end
+			$0
+		"""
+
 	"File handle":
 		prefix: "file"
 		leftLabel: "Files"
