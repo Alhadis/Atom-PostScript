@@ -9,7 +9,10 @@ fileTypes: [
 	"AIAppResources"
 	"Adobe Illustrator Cloud Prefs"
 	"Adobe Illustrator Prefs"
+	"GlobalResources"
 	"Tools Panel Presets"
+	"VariableWidthProfiles"
+	"Vectorizing Presets"
 	"cidfmap", "Fontmap", "Fontmap.GS", "xlatmap"
 	"PPI_CUtils", "Pscript5Idiom"
 ]
@@ -18,7 +21,7 @@ firstLineMatch: """(?x)
 	\\A%(?:!|PDF)
 	|
 	# Adobe Illustrator preferences
-	\\A/(?:Menus|collection1)\\ {(?:\\r|$)
+	\\A/(?:Menus|collection\\d+)\\ {(?:\\r|$)
 	|
 	# Header field of “.inf” manifests
 	\\AAppleFONDID
