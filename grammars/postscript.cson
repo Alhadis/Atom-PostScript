@@ -1137,6 +1137,10 @@ repository:
 				(=?=|\\$error)
 				(?=$|[/\\s{}()<>\\[\\]%])
 			"""
+		},{
+			# Obsolete operators
+			name: "keyword.operator.level-1.obsolete.postscript"
+			match: "(?<![^/\\s{}()<>\\[\\]%])\\b(banddevice|framedevice|renderbands)\\b(?![^/\\s{}()<>\\[\\]%])"
 		}]
 
 
